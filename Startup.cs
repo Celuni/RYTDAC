@@ -80,6 +80,9 @@ namespace RYTDAC
 
                             switch (vote.StatusCode)
                             {
+                                //
+                                // Not found in cache, download from backend in parallel
+                                // 
                                 case HttpStatusCode.NotFound:
                                     _ = Task.Run(() =>
                                     {
@@ -95,7 +98,26 @@ namespace RYTDAC
                                         Store.Client.Entities.PostAsync(voteResult);
                                     });
                                     break;
+                                //
+                                // Found in cache, deliver mirror copy instead
+                                // 
                                 case HttpStatusCode.OK:
+
+                                    if (vote.Content.CachedAt.AddDays(1) < DateTime.UtcNow)
+                                        _ = Task.Run(() =>
+                                        {
+                                            var body = Client.DownloadString(fetch);
+
+                                            var voteResult = JsonConvert.DeserializeObject<Vote>(body);
+
+                                            //
+                                            // Store so we know when to invalidate result
+                                            // 
+                                            voteResult.CachedAt = DateTime.UtcNow;
+
+                                            Store.Client.Entities.PutAsync(voteResult);
+                                        });
+
                                     vote.Content.FromCache = true;
                                     await context.Response.WriteAsJsonAsync(vote.Content);
                                     return;
