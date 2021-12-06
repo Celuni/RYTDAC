@@ -87,6 +87,11 @@ namespace RYTDAC
 
                                         var voteResult = JsonConvert.DeserializeObject<Vote>(body);
 
+                                        //
+                                        // Store so we know when to invalidate result
+                                        // 
+                                        voteResult.CachedAt = DateTime.UtcNow;
+
                                         Store.Client.Entities.PostAsync(voteResult);
                                     });
                                     break;

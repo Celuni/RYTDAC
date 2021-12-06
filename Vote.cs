@@ -26,6 +26,9 @@ namespace RYTDAC
         [JsonProperty("deleted")]
         public bool Deleted { get; set; }
 
+        [JsonProperty("cachedAt")]
+        public DateTime CachedAt { get; set; }
+
         [JsonProperty("fromCache")]
         public bool FromCache { get; set; }
     }
