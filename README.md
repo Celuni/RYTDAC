@@ -10,7 +10,7 @@ Reverse Caching Proxy for [Return YouTube Dislike](https://returnyoutubedislike.
 
 ---
 
-This ASP.NET project acts like a reverse proxy for the Return YouTube Dislike backend and locally caches responses in a database to take load away from the backend while servicng public requests.
+This ASP.NET project acts like a reverse proxy for the Return YouTube Dislike backend and locally caches responses in a database to take load away from the backend while servicing public requests.
 
 ## Setup instructions
 
